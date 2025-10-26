@@ -1,0 +1,42 @@
+# ==========================================
+# WAF TEST PAYLOADS
+# These match the 5 security rules
+# ==========================================
+
+# ====================
+# RULE 1: SQL INJECTION
+# ====================
+test' UNION SELECT 1,2,3--
+admin' UNION SELECT username,password FROM users--
+' UNION SELECT 1,2,3,4,5--
+
+# ====================
+# RULE 2: XSS ATTACKS
+# ====================
+<script>alert('XSS')</script>
+<img src=x onerror=alert(1)>
+<body onload=alert('XSS')>
+' onclick='alert(1)
+
+# ====================
+# RULE 3: COMMAND INJECTION
+# ====================
+; cat /etc/passwd
+| ls -la
+& whoami
+`id`
+
+# ====================
+# RULE 4: FILE INCLUSION
+# ====================
+../../../etc/passwd
+../../windows/win.ini
+c:\windows\system32\drivers\etc\hosts
+/etc/passwd
+
+# ====================
+# RULE 5: BUFFER OVERFLOW
+# ====================
+# Create a file with 600+ characters for testing:
+# echo "AAAAAAAAAAAAAAAAAAAA...[600 chars]...AAAA" > large_input.txt
+# Then use as username input
